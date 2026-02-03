@@ -89,6 +89,9 @@ AI Module (Priority / Insights)
          ↓
 Data Storage (SQLite or JSON)
 ```
+## Website Architecture
+<img width="1101" height="1444" alt="image" src="https://github.com/user-attachments/assets/dc3712e6-e028-472a-a63b-83d1df396627" />
+
 ## 📁 Project Structure
 ```
 Smart_AI_Powered_Task_Buddy/
