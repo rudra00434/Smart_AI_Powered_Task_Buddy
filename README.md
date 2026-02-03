@@ -36,11 +36,10 @@ Whether you're planning daily work, college assignments, or long-term goals, thi
 ✅ Smart prioritization with AI recommendations  
 ✅ Simple, clean, responsive UI  
 ✅ Persistent storage with a backend datastore  
-✅ Built with scalable and extensible architecture
+✅ NLP driven task tags 
+✅ Deadline reminder notifications using flask-SockteIO
+✅ AI based progess forecasts with using Chart.js and gemini API 
 
-> You can expand this section with real feature names once specifics are available (e.g., “NLP-driven task tags”, “deadline reminders”, “AI-based progress forecasts”).
-
----
 
 ## 🛠️ Tech Stack
 
