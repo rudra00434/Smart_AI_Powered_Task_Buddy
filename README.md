@@ -105,7 +105,7 @@ Smart_AI_Powered_Task_Buddy/
 ```
 ## 📞 Contact
 
-Created by Rudra — feel free to open issues or propose improvements!
+### Created by Rudranil Goswami — feel free to open issues or propose improvements!
 
-📧 Add email or professional link (optional)
-💼 GitHub: https://github.com/rudra00434
+### 📧 Email Address : tatairudra39@gmail.com
+### 💼 GitHub: https://github.com/rudra00434
