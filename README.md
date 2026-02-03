@@ -56,9 +56,10 @@ Whether you're planning daily work, college assignments, or long-term goals, thi
 
 ## 📸 Demo / Screenshots
 
-> Add useful UI screenshots here. Example:
+> UI screenshots here. Example:
 
-<img src="./Static/images/screenshot-dashboard.png" alt="Dashboard Screenshot" width="600" />
+<img width="1918" height="866" alt="image" src="https://github.com/user-attachments/assets/7f3f8191-9eb7-4bd3-9ec2-058fbfd46eae" />
+
 
 ---
 
