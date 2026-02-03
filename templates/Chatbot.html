@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Chatbot - MyWebsite</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: radial-gradient(circle at center, #0f172a, #020617);
+      color: white;
+      font-family: 'Poppins', sans-serif;
+    }
+    .navbar {
+      background: rgba(17, 24, 39, 0.95);
+      backdrop-filter: blur(10px);
+    }
+    .chat-container {
+      max-width: 800px;
+      margin: 80px auto;
+      background: rgba(30, 41, 59, 0.85);
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+      padding: 20px;
+      height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .chat-box {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+    }
+    .chat-message {
+      margin: 10px 0;
+      padding: 12px 18px;
+      border-radius: 18px;
+      max-width: 70%;
+      animation: fadeIn 0.4s ease-in;
+    }
+    .user-message {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      margin-left: auto;
+      box-shadow: 0px 4px 10px rgba(37, 99, 235, 0.5);
+    }
+    .bot-message {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      margin-right: auto;
+      box-shadow: 0px 4px 10px rgba(34, 197, 94, 0.5);
+    }
+    .chat-input {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .chat-input input {
+      flex: 1;
+      padding: 12px;
+      border-radius: 15px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+    .chat-input button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 15px;
+      background: #06b6d4;
+      color: white;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .chat-input button:hover {
+      background: #0891b2;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Typing bubble animation */
+    .typing {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      margin-right: auto;
+      box-shadow: 0px 4px 10px rgba(34, 197, 94, 0.5);
+      padding: 10px 15px;
+      border-radius: 18px;
+      max-width: 120px;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+      animation: blink 1.4s infinite both;
+    }
+    .dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    .dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    @keyframes blink {
+      0%, 80%, 100% { opacity: 0; }
+      40% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark px-4">
+    <a class="navbar-brand fw-bold text-cyan-400" href="{{ url_for('hello_world') }}">🌐 My Task Manager</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link active" href="{{ url_for('hello_world') }}">🏠 Home</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{{ url_for('about') }}">ℹ️ About</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{{ url_for('chatbot') }}">🤖 TaskBot</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{{ url_for('contact') }}">📞 Contact Us</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Chatbot Section -->
+  <div class="chat-container">
+    <div class="chat-box" id="chatBox">
+      <div class="chat-message bot-message">👋 Hello! I’m Nova, your AI assistant. How can I help you today?</div>
+    </div>
+    <div class="chat-input">
+      <input type="text" id="userInput" placeholder="Type your message...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const chatBox = document.getElementById("chatBox");
+    const userInput = document.getElementById("userInput");
+    let typingBubble = null;
+
+    function addMessage(content, sender) {
+      const msg = document.createElement("div");
+      msg.classList.add("chat-message");
+      msg.classList.add(sender === "user" ? "user-message" : "bot-message");
+      msg.innerText = content;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function showTyping() {
+      typingBubble = document.createElement("div");
+      typingBubble.classList.add("typing");
+      typingBubble.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+      chatBox.appendChild(typingBubble);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function hideTyping() {
+      if (typingBubble) {
+        typingBubble.remove();
+        typingBubble = null;
+      }
+    }
+
+    async function sendMessage() {
+      const userMsg = userInput.value.trim();
+      if (userMsg === "") return;
+
+      addMessage(userMsg, "user");
+      userInput.value = "";
+
+      showTyping(); // Show bubble when waiting
+
+      try {
+        const res = await fetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: userMsg })
+        });
+        const data = await res.json();
+        hideTyping();
+        addMessage(data.reply, "bot");
+      } catch (err) {
+        hideTyping();
+        addMessage("❌ Error: Unable to connect to server.", "bot");
+      }
+    }
+
+    // Allow Enter key to send
+    userInput.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

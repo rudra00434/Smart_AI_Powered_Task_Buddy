@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - My Task Manager</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Lottie Player -->
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+    }
+    .hero-section {
+      background: linear-gradient(135deg, #0a2a5c, #1d4ed8);
+      color: white;
+      padding: 80px 0;
+      border-radius: 0 0 40px 40px;
+    }
+    .hero-section h1 {
+      font-weight: 800;
+      font-size: 3rem;
+    }
+    .hero-section p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+    .contact-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+    }
+    .contact-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+    }
+    .contact-card h5 {
+      font-weight: 700;
+      margin-top: 15px;
+    }
+    .contact-card p {
+      font-size: 0.95rem;
+      color: #555;
+    }
+    .btn-modern {
+      background: linear-gradient(135deg, #0a2a5c, #1d4ed8);
+      border: none;
+      color: #fff;
+      border-radius: 30px;
+      padding: 10px 20px;
+      transition: 0.3s;
+    }
+    .btn-modern:hover {
+      background: linear-gradient(135deg, #1d4ed8, #0a2a5c);
+      transform: scale(1.05);
+    }
+    .contact-form {
+      background: #fff;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+    .form-control {
+      border-radius: 12px;
+      padding: 12px;
+    }
+    textarea.form-control {
+      min-height: 150px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Section -->
+  <section class="hero-section text-center">
+    <div class="container">
+      <h1>Get in touch</h1>
+      <p>Have a question about My Task Manager? You might find the answer in our
+        <a href="#" class="text-warning fw-bold">Help Centre</a>. Otherwise, see all the ways you can reach us below.</p>
+    </div>
+  </section>
+
+  <!-- Contact Options -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row g-4">
+
+        <!-- Existing Users -->
+        <div class="col-md-4">
+  <div class="contact-card text-center">
+    <lottie-player src="https://assets8.lottiefiles.com/packages/lf20_qp1q7mct.json"
+               background="transparent"
+               speed="1"
+               style="width: 400px; height: 200px; margin:auto;"
+               loop autoplay>
+</lottie-player>
+
+    <h5>Existing Users</h5>
+    <p>Already using My Task Manager? Our support team is ready to help with any issues.</p>
+    <a href="#" class="btn btn-modern">Contact us →</a>
+  </div>
+ </div>
+
+
+        <!-- New Users -->
+        <div class="col-md-4">
+          <div class="contact-card text-center">
+            <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_jbrw3hcz.json"
+                           background="transparent"
+                           speed="1"
+                           style="width: 300px; height: 200px; margin:auto;"
+                           loop autoplay>
+            </lottie-player>
+            <h5>New Users</h5>
+            <p>Interested in signing up? Our team can help you set up your first task list.</p>
+            <a href="#" class="btn btn-modern">Contact us →</a>
+          </div>
+        </div>
+
+        <!-- Business Users -->
+        <div class="col-md-4">
+          <div class="contact-card text-center">
+            <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_t24tpvcu.json"
+                           background="transparent"
+                           speed="1"
+                           style="width: 300px; height: 200px; margin:auto;"
+                           loop autoplay>
+            </lottie-player>
+            <h5>Business Users</h5>
+            <p>Managing a team? We’ll connect you with a relationship manager for business solutions.</p>
+            <a href="#" class="btn btn-modern">Contact us →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Form -->
+  <section class="py-5">
+    <div class="container">
+      <div class="contact-form">
+        <h3 class="fw-bold mb-4 text-center">Send us a message</h3>
+        <form>
+          <div class="mb-3">
+            <label for="name" class="form-label">Your Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter your name">
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Your Email</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter your email">
+          </div>
+          <div class="mb-3">
+            <label for="message" class="form-label">Message</label>
+            <textarea class="form-control" id="message" placeholder="Type your message here..."></textarea>
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-modern">Send Message</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

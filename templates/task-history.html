@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task History</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom Styling -->
+  <style>
+    body {
+      background: linear-gradient(135deg, #6dd5ed, #2193b0);
+      min-height: 100vh;
+    }
+    .navbar {
+      border-radius: 12px;
+      margin: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .navbar-brand {
+      font-weight: bold;
+      font-size: 1.4rem;
+      color: #fff !important;
+    }
+    .nav-link {
+      color: #eaeaea !important;
+      font-weight: 500;
+    }
+    .nav-link.active {
+      color: #ffd700 !important;
+    }
+    .card-custom {
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
+    h2 {
+      font-weight: bold;
+      color: #333;
+    }
+    .table td, .table th {
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{{ url_for('hello_world') }}">✨ My Task Manager</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link active" href="{{ url_for('hello_world') }}">🏠 Home</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{{ url_for('tasks') }}">📝 Task</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{{ url_for('task_history') }}">📜 Task History</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{{ url_for('about') }}">ℹ️ About us</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{{ url_for('contact') }}">📞 Contact Us</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{{ url_for('chatbot') }}">🤖 TaskBot</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <!-- Page Content -->
+  <div class="container mt-5">
+    <div class="card card-custom">
+      <h2 class="mb-4 text-center">📜 Task History</h2>
+
+      <table class="table table-hover table-bordered text-center">
+        <thead class="table-dark">
+          <tr>
+            <th>Serial No</th>
+            <th>Task Name</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Date Created</th>
+            <th>Delete</th> <!-- 🔥 New column -->
+          </tr>
+        </thead>
+        <tbody>
+          {% for task in tasks %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ task.title }}</td>
+            <td>{{ task.description }}</td>
+            <td>
+              {% if task.completed %}
+                <span class="badge bg-success">✅ Completed</span>
+              {% else %}
+                <span class="badge bg-warning text-dark">⏳ Pending</span>
+              {% endif %}
+            </td>
+            <td>{{ task.date_created.strftime('%d %b %Y') }}</td>
+            <td>
+              <!-- Bootstrap Delete Button -->
+              <form method="POST" action="{{ url_for('delete_task', task_id=task.serial_no) }}" style="display:inline;">
+                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this task?');">
+                  🗑 Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="6" class="text-center">No tasks yet.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
