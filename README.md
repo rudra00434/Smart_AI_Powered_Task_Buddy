@@ -47,10 +47,10 @@ Whether you're planning daily work, college assignments, or long-term goals, thi
 | Component | Technology |
 |-----------|------------|
 | Backend   | Python & Flask |
-| Frontend  | HTML, CSS, Bootstrap |
+| Frontend  | HTML5, CSS , Bootstrap 5 |
 | AI Logic  | Python AI/ML libraries & Gemini API and Groq API |
-| Data Storage | SQLite / JSON (update accordingly) |
-| Deployment | (Heroku / AWS / Railway ) |
+| Data Storage | SQLite and ORM Sqlalchemy |
+| Deployment | (Heroku / Render / Railway ) |
 
 ---
 
