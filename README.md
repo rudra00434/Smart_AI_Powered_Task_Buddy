@@ -65,8 +65,10 @@ Whether you're planning daily work, college assignments, or long-term goals, thi
 ## 📦 Installation (Local)
 
 1. **Clone the repository**
-   ```bash
-
+   ```
+   git clone https://github.com/rudra00434/Smart_AI_Powered_Task_Buddy.git
+   cd Smart_AI_Powered_Task_Buddy
+   ```
 ## Architecture & How It Works
 ```
 User UI (Flask Templates)
@@ -77,6 +79,20 @@ AI Module (Priority / Insights)
          ↓
 Data Storage (SQLite or JSON)
 ```
+## 📁 Project Structure
+```
+Smart_AI_Powered_Task_Buddy/
+├── Static/
+│   └── images/
+├── templates/
+│   └── *.html
+├── app.py
+├── requirements.txt
+└── README.md
+```
+## 📞 Contact
 
-   git clone https://github.com/rudra00434/Smart_AI_Powered_Task_Buddy.git
-   cd Smart_AI_Powered_Task_Buddy
+Created by Rudra — feel free to open issues or propose improvements!
+
+📧 Add email or professional link (optional)
+💼 GitHub: https://github.com/rudra00434
