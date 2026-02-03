@@ -48,9 +48,9 @@ Whether you're planning daily work, college assignments, or long-term goals, thi
 |-----------|------------|
 | Backend   | Python & Flask |
 | Frontend  | HTML, CSS, Bootstrap |
-| AI Logic  | Python AI/ML libraries (specify if used) |
+| AI Logic  | Python AI/ML libraries & Gemini API and Groq API |
 | Data Storage | SQLite / JSON (update accordingly) |
-| Deployment | (Heroku / AWS / Railway — update if deployed) |
+| Deployment | (Heroku / AWS / Railway ) |
 
 ---
 
