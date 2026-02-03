@@ -41,6 +41,8 @@ Whether you're planning daily work, college assignments, or long-term goals, thi
 ✅ AI based progess forecasts with using Chart.js and gemini API 
 
 
+
+
 ## 🛠️ Tech Stack
 
 | Component | Technology |
