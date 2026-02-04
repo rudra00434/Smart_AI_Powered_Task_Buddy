@@ -9,7 +9,7 @@ Home = Flask(__name__)
 Home.secret_key = "a8f9s7d6f5g4h3j2k1l0qwertyuiop"
 
 # Gemini API Key
-genai.configure(api_key="AIzaSyBWitJxuz6hQjgvIQvzLqCQCIEBRbU_e00")
+genai.configure(api_key="AIzaSyDqr6qTfFOO4sbTt0Gvav12w39b-sb2Vi8")
 
 Home.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///Task.db"
 Home.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -132,21 +132,33 @@ def task_history():
 def chatbot():
     return render_template('Chatbot.html')
 
-
 @Home.route('/chat', methods=["POST"])
 def chat():
-    user_msg = request.json.get("message", "")
+    user_msg = request.json.get("message", "").strip()
+
     if not user_msg:
         return jsonify({"reply": "⚠️ Please type something."})
+
     try:
-        model = genai.GenerativeModel("gemini-2.5-pro")
-        response = model.generate_content(user_msg)
-        return jsonify({"reply": response.text})
+        model = genai.GenerativeModel("models/gemini-flash-latest")
+
+        response = model.generate_content(
+            contents=user_msg,
+            generation_config={
+                "temperature": 0.7,
+                "max_output_tokens": 200
+            }
+        )
+
+        reply_text = response.text if response.text else "⚠️ No response."
+        return jsonify({"reply": reply_text})
+
     except Exception as e:
-        return jsonify({"reply": f"❌ Error: {str(e)}"})
+        print("Gemini Error:", e)
+        return jsonify({"reply": f"Error: {str(e)}"})
 
 
-@Home.route('/about')
+@Home.route('/about/')
 def about():
     return render_template('about.html')
 
@@ -247,3 +259,4 @@ if __name__ == '__main__':
     with Home.app_context():
         db.create_all()
     Home.run(debug=True, port=8000)
+
