@@ -30,7 +30,7 @@ Whether you're planning daily work, college assignments, or long-term goals, thi
 ---
 
 ## 🧩 Key Features
-
+```
 ✅ Create, update, delete, and track tasks  
 ✅ Intelligent task suggestions and categorization  
 ✅ Smart prioritization with AI recommendations  
@@ -38,9 +38,9 @@ Whether you're planning daily work, college assignments, or long-term goals, thi
 ✅ Persistent storage with a backend datastore  
 ✅ NLP driven task tags 
 ✅ Deadline reminder notifications using flask-SockteIO
-✅ AI based progess forecasts with using Chart.js and gemini API 
+✅ AI based progess forecasts with using Chart.js and gemini API key
 
-
+```
 
 
 ## 🛠️ Tech Stack
