@@ -65,6 +65,7 @@ Whether you're planning daily work, college assignments, or long-term goals, thi
 <img width="1902" height="867" alt="image" src="https://github.com/user-attachments/assets/13305488-2719-4c81-8806-734ad47614cf" />
 <img width="1902" height="747" alt="image" src="https://github.com/user-attachments/assets/9d67be64-f976-47c1-8edb-03bb8df551b0" />
 <img width="1895" height="872" alt="image" src="https://github.com/user-attachments/assets/6e580f5f-778e-4ff3-a7c1-36673881b302" />
+<img width="1890" height="866" alt="image" src="https://github.com/user-attachments/assets/fb28c45d-86c6-4a00-9480-ac88c0396bd9" />
 <img width="1896" height="873" alt="image" src="https://github.com/user-attachments/assets/4ebba3be-4534-4dad-abc8-700869bc7b3b" />
 <img width="1782" height="334" alt="image" src="https://github.com/user-attachments/assets/124dbe0f-b5f0-4253-bf13-75002e93bfb2" />
 <img width="1899" height="869" alt="image" src="https://github.com/user-attachments/assets/eb69ccb6-4011-4fdc-b8d2-e60cd05580e7" />
