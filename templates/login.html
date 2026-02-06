@@ -2,65 +2,69 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login - ToDo App</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+    <title>Login - Task Buddy App</title>
 
-        /* Reset & font */
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
+
         body, html {
             height: 100%;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Poppins', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1f1c2c, #928dab);
             overflow: hidden;
         }
 
-        /* Floating particles background */
+        /* Animated Gradient Overlay */
         body::before {
             content: "";
             position: absolute;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.05) 10%, transparent 10%), radial-gradient(circle, rgba(255,255,255,0.05) 10%, transparent 10%);
-            background-position: 0 0, 100px 100px;
-            background-size: 200px 200px;
-            animation: moveBg 30s linear infinite;
+            width: 300%;
+            height: 300%;
+            background: linear-gradient(45deg, #ff6ec4, #7873f5, #4facfe, #43e97b);
+            opacity: 0.15;
+            animation: gradientMove 25s linear infinite;
             z-index: 0;
         }
-        @keyframes moveBg {
-            from { transform: translate(0,0); }
-            to { transform: translate(-100px,-100px); }
+
+        @keyframes gradientMove {
+            0% { transform: translate(0,0); }
+            100% { transform: translate(-50%,-50%); }
         }
 
-        /* Container card */
+        /* Glass Card */
         .container {
             position: relative;
-            z-index: 1;
-            background: #fff;
-            padding: 50px 35px;
-            border-radius: 20px;
-            width: 360px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            z-index: 2;
+            width: 380px;
+            padding: 45px 35px;
+            border-radius: 25px;
+            backdrop-filter: blur(20px);
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.35);
             text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 35px 70px rgba(0,0,0,0.4);
+            color: white;
+            transition: 0.4s ease;
         }
 
-        /* Title */
+        .container:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 35px 80px rgba(0,0,0,0.45);
+        }
+
         h2 {
-            color: #333;
-            font-size: 2em;
-            margin-bottom: 30px;
+            font-size: 2.2em;
+            margin-bottom: 25px;
             letter-spacing: 1px;
         }
 
@@ -68,81 +72,121 @@
         input {
             width: 100%;
             padding: 14px 18px;
-            margin: 12px 0;
-            border-radius: 10px;
-            border: 1px solid #ccc;
+            margin: 14px 0;
+            border-radius: 12px;
+            border: none;
             font-size: 1em;
-            transition: all 0.3s ease;
-        }
-        input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 10px rgba(102,126,234,0.4);
+            background: rgba(255,255,255,0.2);
+            color: white;
             outline: none;
+            transition: 0.3s;
+        }
+
+        input::placeholder {
+            color: #eee;
+        }
+
+        input:focus {
+            background: rgba(255,255,255,0.3);
+            box-shadow: 0 0 12px rgba(255,255,255,0.5);
         }
 
         /* Button */
         button {
             width: 100%;
             padding: 14px;
-            margin-top: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin-top: 18px;
+            border-radius: 12px;
             border: none;
-            color: white;
-            font-weight: bold;
+            font-weight: 600;
             font-size: 1.1em;
-            border-radius: 10px;
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            color: white;
+            background: linear-gradient(135deg, #ff6ec4, #7873f5);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
         }
+
+        button::before {
+            content: "";
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            background: rgba(255,255,255,0.2);
+            top: -110%;
+            left: -10%;
+            transform: rotate(25deg);
+            transition: 0.5s;
+        }
+
+        button:hover::before {
+            top: 110%;
+        }
+
         button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.4);
         }
 
         /* Links */
         .link {
-            margin-top: 20px;
-            font-size: 0.9em;
-        }
-        .link a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s ease;
-        }
-        .link a:hover {
-            color: #764ba2;
+            margin-top: 22px;
+            font-size: 0.95em;
         }
 
-        /* Flash messages */
+        .link a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .link a::after {
+            content: "";
+            width: 0%;
+            height: 2px;
+            background: white;
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            transition: 0.3s;
+        }
+
+        .link a:hover::after {
+            width: 100%;
+        }
+
+        /* Flash */
         .flash {
             margin-top: 15px;
-            color: #ff4c4c;
+            color: #ffdede;
             font-weight: bold;
             font-size: 0.9em;
         }
 
-        /* Subtle animated highlight */
+        /* Floating Light Effects */
         .container::after {
             content: "";
             position: absolute;
-            top: -50%;
-            left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle at center, rgba(102,126,234,0.15) 0%, transparent 70%);
-            animation: rotateBg 15s linear infinite;
-            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            top: -50%;
+            left: -50%;
+            animation: rotateLight 20s linear infinite;
             z-index: -1;
         }
-        @keyframes rotateBg {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        @keyframes rotateLight {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
     </style>
 </head>
 <body>
+
     <div class="container">
         <h2>Login</h2>
         <form method="POST">
@@ -150,9 +194,11 @@
             <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Login</button>
         </form>
+
         <div class="link">
             <a href="{{ url_for('signup') }}">Don't have an account? Sign Up</a>
         </div>
+
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <div class="flash">
@@ -163,5 +209,7 @@
             {% endif %}
         {% endwith %}
     </div>
+
 </body>
 </html>
+
