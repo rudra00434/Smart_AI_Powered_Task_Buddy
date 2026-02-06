@@ -73,9 +73,11 @@ class Task(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
-@app.before_request
 def create_tables():
-    db.create_all()
+    with app.app_context():
+        db.create_all()
+
+create_tables()
 
 
 # -------------------------
