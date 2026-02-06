@@ -32,7 +32,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+db = SQLAlchemy()
+db.init_app(app)
+
 
 # -------------------------
 # Login Manager Setup
