@@ -11,7 +11,7 @@ app = Flask(__name__)
 # -------------------------
 # Secret Key (Env Safe)
 # -------------------------
-app.secret_key = os.environ.get("SECRET_KEY")
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
 
 # -------------------------
 # Gemini API Key (Env Safe)
@@ -24,7 +24,11 @@ genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 db_path = os.path.join(BASE_DIR, "Task.db")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    "DATABASE_URL",
+    f"sqlite:///{db_path}"
+)
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -66,10 +70,8 @@ class Task(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
-# -------------------------
-# ALWAYS CREATE TABLES
-# -------------------------
-with app.app_context():
+@app.before_first_request
+def create_tables():
     db.create_all()
 
 
