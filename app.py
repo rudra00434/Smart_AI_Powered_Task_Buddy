@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
 import google.generativeai as genai
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.pool import NullPool
 from datetime import datetime
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -30,7 +31,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     "DATABASE_URL",
     f"sqlite:///{db_path}"
 )
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    "poolclass": NullPool
+}
 
 db = SQLAlchemy()
 db.init_app(app)
