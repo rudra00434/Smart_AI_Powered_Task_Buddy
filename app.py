@@ -24,7 +24,11 @@ genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 db_path = os.path.join(BASE_DIR, "Task.db")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get( "DATABASE_URL" )
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    "DATABASE_URL",
+    "sqlite:///Task.db"
+)
+
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -67,9 +71,11 @@ class Task(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
-@app.before_first_request
 def create_tables():
-    db.create_all()
+    with app.app_context():
+        db.create_all()
+
+create_tables()
 
 
 # -------------------------
