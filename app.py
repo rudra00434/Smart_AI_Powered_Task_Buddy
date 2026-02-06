@@ -16,7 +16,9 @@ app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
 # -------------------------
 # Gemini API Key (Env Safe)
 # -------------------------
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+api_key = os.environ.get("GEMINI_API_KEY")
+if api_key:
+    genai.configure(api_key=api_key)
 
 # -------------------------
 # Database Config (Vercel Safe)
@@ -26,15 +28,12 @@ db_path = os.path.join(BASE_DIR, "Task.db")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     "DATABASE_URL",
-    "sqlite:///Task.db"
+    f"sqlite:///{db_path}"
 )
-
-
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy()
 db.init_app(app)
-
 
 # -------------------------
 # Login Manager Setup
@@ -42,7 +41,6 @@ db.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
-
 
 # -------------------------
 # User Model
@@ -54,11 +52,9 @@ class User(db.Model, UserMixin):
     bio = db.Column(db.String(250), default="")
     tasks = db.relationship('Task', backref='owner', lazy=True)
 
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
 
 # -------------------------
 # Task Model
@@ -69,16 +65,7 @@ class Task(db.Model):
     description = db.Column(db.String(500), nullable=False)
     completed = db.Column(db.Boolean, default=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
-
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-
-def create_tables():
-    with app.app_context():
-        db.create_all()
-
-create_tables()
-
 
 # -------------------------
 # AUTH ROUTES
@@ -102,8 +89,6 @@ def signup():
 def favicon():
     return '', 204
 
-
-
 @app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -119,14 +104,12 @@ def login():
             return redirect(url_for('login'))
     return render_template('login.html')
 
-
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     flash("Logged out successfully!")
     return redirect(url_for('login'))
-
 
 # -------------------------
 # MAIN ROUTES
@@ -136,7 +119,6 @@ def logout():
 def hello_world():
     all_tasks = Task.query.filter_by(user_id=current_user.id).order_by(Task.date_created.desc()).all()
     return render_template('index.html', tasks=all_tasks)
-
 
 @app.route("/tasks", methods=["GET", "POST"])
 @login_required
@@ -152,18 +134,15 @@ def tasks():
     all_tasks = Task.query.filter_by(user_id=current_user.id).all()
     return render_template("tasks.html", tasks=all_tasks)
 
-
 @app.route('/chatbot')
 def chatbot():
     return render_template('Chatbot.html')
-
 
 @app.route('/chat', methods=["POST"])
 def chat():
     user_msg = request.json.get("message", "").strip()
     if not user_msg:
         return jsonify({"reply": "⚠️ Please type something."})
-
     try:
         model = genai.GenerativeModel("models/gemini-flash-latest")
         response = model.generate_content(user_msg)
@@ -172,16 +151,13 @@ def chat():
     except Exception as e:
         return jsonify({"reply": f"Error: {str(e)}"})
 
-
 @app.route('/about/')
 def about():
     return render_template('about.html')
 
-
 @app.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html')
-
 
 # -------------------------
 # PROFILE
@@ -208,11 +184,6 @@ def profile():
     user_tasks = Task.query.filter_by(user_id=current_user.id).all()
     return render_template('profile.html', user=current_user, tasks=user_tasks)
 
-
-# -------------------------
-# LOCAL RUN ONLY
-# -------------------------
 if __name__ == '__main__':
     app.run(debug=True)
 
-       
