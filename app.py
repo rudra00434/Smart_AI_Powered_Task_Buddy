@@ -5,21 +5,21 @@ from datetime import datetime
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
-Home = Flask(__name__)
-Home.secret_key = "a8f9s7d6f5g4h3j2k1l0qwertyuiop"
+app = Flask(__name__)
+app.secret_key = "a8f9s7d6f5g4h3j2k1l0qwertyuiop"
 
 # Gemini API Key
 genai.configure(api_key="AIzaSyCGuLpyBKXhsNSAkqCKpXUHoz8zqoguF0Y")
 
-Home.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///Task.db"
-Home.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(Home)
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///Task.db"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
 # -------------------------
 # User Model & Login Setup
 # -------------------------
 login_manager = LoginManager()
-login_manager.init_app(Home)
+login_manager.init_app(app)
 login_manager.login_view = 'login'  # Redirect unauthenticated users to login
 
 
@@ -56,7 +56,7 @@ class Task(db.Model):
 # -------------------------
 # Authentication Routes
 # -------------------------
-@Home.route('/signup', methods=["GET", "POST"])
+@app.route('/signup', methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
         username = request.form['username']
@@ -72,7 +72,7 @@ def signup():
     return render_template('signup.html')
 
 
-@Home.route('/login', methods=["GET", "POST"])
+@app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form['username']
@@ -88,7 +88,7 @@ def login():
     return render_template('login.html')
 
 
-@Home.route('/logout')
+@app.route('/logout')
 @login_required
 def logout():
     logout_user()
@@ -99,14 +99,14 @@ def logout():
 # -------------------------
 # Existing Routes (unchanged)
 # -------------------------
-@Home.route('/')
+@app.route('/')
 @login_required
 def hello_world():
     all_tasks = Task.query.filter_by(user_id=current_user.id).order_by(Task.date_created.desc()).all()
     return render_template('index.html', tasks=all_tasks)
 
 
-@Home.route("/tasks", methods=["GET", "POST"])
+@app.route("/tasks", methods=["GET", "POST"])
 @login_required
 def tasks():
     if request.method == "POST":
@@ -121,18 +121,18 @@ def tasks():
     return render_template("tasks.html", tasks=all_tasks)
 
 
-@Home.route('/task-history')
+@app.route('/task-history')
 @login_required
 def task_history():
     all_tasks = Task.query.filter_by(user_id=current_user.id).order_by(Task.date_created.desc()).all()
     return render_template('task-history.html', tasks=all_tasks)
 
 
-@Home.route('/chatbot')
+@app.route('/chatbot')
 def chatbot():
     return render_template('Chatbot.html')
 
-@Home.route('/chat', methods=["POST"])
+@app.route('/chat', methods=["POST"])
 def chat():
     user_msg = request.json.get("message", "").strip()
 
@@ -158,22 +158,22 @@ def chat():
         return jsonify({"reply": f"Error: {str(e)}"})
 
 
-@Home.route('/about/')
+@app.route('/about/')
 def about():
     return render_template('about.html')
 
 
-@Home.route('/contact')
+@app.route('/contact')
 def contact():
     return render_template('Contact.html')
 
 
-@Home.route('/dashboard')
+@app.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html')
 
 
-@Home.route('/api/stats')
+@app.route('/api/stats')
 def stats():
     total = Task.query.filter_by(
         user_id=current_user.id).count() if current_user.is_authenticated else Task.query.count()
@@ -196,7 +196,7 @@ def stats():
     return jsonify({"total": total, "completed": completed, "pending": pending, "trend": trend})
 
 
-@Home.route('/delete-task/<int:task_id>', methods=["POST"])
+@app.route('/delete-task/<int:task_id>', methods=["POST"])
 @login_required
 def delete_task(task_id):
     task = Task.query.filter_by(serial_no=task_id, user_id=current_user.id).first_or_404()
@@ -208,7 +208,7 @@ def delete_task(task_id):
 # -------------------------
 # Profile Routes (enhanced)
 # -------------------------
-@Home.route('/profile', methods=["GET", "POST"])
+@app.route('/profile', methods=["GET", "POST"])
 @login_required
 def profile():
     if request.method == "POST":
@@ -256,7 +256,7 @@ def profile():
 # Run App
 # -------------------------
 if __name__ == '__main__':
-    with Home.app_context():
+    with app.app_context():
         db.create_all()
-    Home.run(debug=True, port=8000)
+    app.run(debug=True, port=8000)
 
