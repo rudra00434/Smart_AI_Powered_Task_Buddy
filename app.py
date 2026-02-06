@@ -149,6 +149,13 @@ def tasks():
         return redirect(url_for("tasks"))
     all_tasks = Task.query.filter_by(user_id=current_user.id).all()
     return render_template("tasks.html", tasks=all_tasks)
+    
+@app.route('/task-history')
+@login_required
+def task_history():
+    all_tasks = Task.query.filter_by(user_id=current_user.id)\
+        .order_by(Task.date_created.desc()).all()
+    return render_template('task-history.html', tasks=all_tasks)
 
 @app.route('/chatbot')
 def chatbot():
