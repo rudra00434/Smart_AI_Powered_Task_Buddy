@@ -46,28 +46,27 @@ login_manager.login_view = 'login'
 # User Model
 # -------------------------
 class User(db.Model, UserMixin):
+    __tablename__ = "users"   # <-- ADD THIS
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
     bio = db.Column(db.String(250), default="")
     tasks = db.relationship('Task', backref='owner', lazy=True)
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
-# -------------------------
-# Task Model
-# -------------------------
 class Task(db.Model):
+    __tablename__ = "tasks"   # <-- ADD THIS
+
     serial_no = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.String(500), nullable=False)
     completed = db.Column(db.Boolean, default=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-# -------------------------
+    # CHANGE FOREIGN KEY
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
 # AUTH ROUTES
 # -------------------------
 @app.route('/signup', methods=["GET", "POST"])
