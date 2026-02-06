@@ -24,10 +24,7 @@ genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 db_path = os.path.join(BASE_DIR, "Task.db")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-    "DATABASE_URL",
-    f"sqlite:///{db_path}"
-)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get( "DATABASE_URL" )
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
