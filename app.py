@@ -11,6 +11,8 @@ app = Flask(__name__)
 app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config["PROPAGATE_EXCEPTIONS"] = True
+
 
 # -------------------------
 # Secret Key (Env Safe)
@@ -197,6 +199,11 @@ def profile():
 
     user_tasks = Task.query.filter_by(user_id=current_user.id).all()
     return render_template('profile.html', user=current_user, tasks=user_tasks)
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    return f"ERROR: {str(e)}", 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)
