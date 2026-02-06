@@ -9,7 +9,7 @@ Home = Flask(__name__)
 Home.secret_key = "a8f9s7d6f5g4h3j2k1l0qwertyuiop"
 
 # Gemini API Key
-genai.configure(api_key="AIzaSyDqr6qTfFOO4sbTt0Gvav12w39b-sb2Vi8")
+genai.configure(api_key="AIzaSyCGuLpyBKXhsNSAkqCKpXUHoz8zqoguF0Y")
 
 Home.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///Task.db"
 Home.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
