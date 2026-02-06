@@ -55,6 +55,12 @@ class User(db.Model, UserMixin):
     tasks = db.relationship('Task', backref='owner', lazy=True)
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+
 class Task(db.Model):
     __tablename__ = "tasks"   # <-- ADD THIS
 
