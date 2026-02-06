@@ -4,31 +4,50 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+import os
 
 app = Flask(__name__)
-app.secret_key = "a8f9s7d6f5g4h3j2k1l0qwertyuiop"
 
-# Gemini API Key
-genai.configure(api_key="AIzaSyCGuLpyBKXhsNSAkqCKpXUHoz8zqoguF0Y")
+# -------------------------
+# Secret Key (Env Safe)
+# -------------------------
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///Task.db"
+# -------------------------
+# Gemini API Key (Env Safe)
+# -------------------------
+genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+
+# -------------------------
+# Database Config (Vercel Safe)
+# -------------------------
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+db_path = os.path.join(BASE_DIR, "Task.db")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    "DATABASE_URL", f"sqlite:///{db_path}"
+)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db = SQLAlchemy(app)
 
 # -------------------------
-# User Model & Login Setup
+# Login Manager Setup
 # -------------------------
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'  # Redirect unauthenticated users to login
+login_manager.login_view = 'login'
 
 
+# -------------------------
+# User Model
+# -------------------------
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
-    password = db.Column(db.String(200), nullable=False)  # hashed password
-    bio = db.Column(db.String(250), default="")            # new bio field
-    tasks = db.relationship('Task', backref='owner', lazy=True)  # link tasks
+    password = db.Column(db.String(200), nullable=False)
+    bio = db.Column(db.String(250), default="")
+    tasks = db.relationship('Task', backref='owner', lazy=True)
 
 
 @login_manager.user_loader
@@ -46,15 +65,18 @@ class Task(db.Model):
     completed = db.Column(db.Boolean, default=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # Link task to user
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-    def __repr__(self):
-        return f"{self.serial_no} - {self.title} - {self.description} - {self.completed} - User {self.user_id}"
 
 
 # -------------------------
-# Authentication Routes
+# ALWAYS CREATE TABLES
+# -------------------------
+with app.app_context():
+    db.create_all()
+
+
+# -------------------------
+# AUTH ROUTES
 # -------------------------
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
@@ -97,7 +119,7 @@ def logout():
 
 
 # -------------------------
-# Existing Routes (unchanged)
+# MAIN ROUTES
 # -------------------------
 @app.route('/')
 @login_required
@@ -121,40 +143,23 @@ def tasks():
     return render_template("tasks.html", tasks=all_tasks)
 
 
-@app.route('/task-history')
-@login_required
-def task_history():
-    all_tasks = Task.query.filter_by(user_id=current_user.id).order_by(Task.date_created.desc()).all()
-    return render_template('task-history.html', tasks=all_tasks)
-
-
 @app.route('/chatbot')
 def chatbot():
     return render_template('Chatbot.html')
 
+
 @app.route('/chat', methods=["POST"])
 def chat():
     user_msg = request.json.get("message", "").strip()
-
     if not user_msg:
         return jsonify({"reply": "⚠️ Please type something."})
 
     try:
         model = genai.GenerativeModel("models/gemini-flash-latest")
-
-        response = model.generate_content(
-            contents=user_msg,
-            generation_config={
-                "temperature": 0.7,
-                "max_output_tokens": 200
-            }
-        )
-
+        response = model.generate_content(user_msg)
         reply_text = response.text if response.text else "⚠️ No response."
         return jsonify({"reply": reply_text})
-
     except Exception as e:
-        print("Gemini Error:", e)
         return jsonify({"reply": f"Error: {str(e)}"})
 
 
@@ -163,56 +168,18 @@ def about():
     return render_template('about.html')
 
 
-@app.route('/contact')
-def contact():
-    return render_template('Contact.html')
-
-
 @app.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html')
 
 
-@app.route('/api/stats')
-def stats():
-    total = Task.query.filter_by(
-        user_id=current_user.id).count() if current_user.is_authenticated else Task.query.count()
-    completed = Task.query.filter_by(user_id=current_user.id,
-                                     completed=True).count() if current_user.is_authenticated else Task.query.filter_by(
-        completed=True).count()
-    pending = Task.query.filter_by(user_id=current_user.id,
-                                   completed=False).count() if current_user.is_authenticated else Task.query.filter_by(
-        completed=False).count()
-    from datetime import timedelta, date
-    today = date.today()
-    trend = []
-    for i in range(7):
-        day = today - timedelta(days=i)
-        count = Task.query.filter(db.func.date(Task.date_created) == day,
-                                  Task.user_id == current_user.id).count() if current_user.is_authenticated else Task.query.filter(
-            db.func.date(Task.date_created) == day).count()
-        trend.append({"date": day.strftime("%Y-%m-%d"), "count": count})
-    trend.reverse()
-    return jsonify({"total": total, "completed": completed, "pending": pending, "trend": trend})
-
-
-@app.route('/delete-task/<int:task_id>', methods=["POST"])
-@login_required
-def delete_task(task_id):
-    task = Task.query.filter_by(serial_no=task_id, user_id=current_user.id).first_or_404()
-    db.session.delete(task)
-    db.session.commit()
-    return redirect(request.referrer or url_for('hello_world'))
-
-
 # -------------------------
-# Profile Routes (enhanced)
+# PROFILE
 # -------------------------
 @app.route('/profile', methods=["GET", "POST"])
 @login_required
 def profile():
     if request.method == "POST":
-        # Update username
         new_username = request.form.get("username")
         if new_username:
             if User.query.filter_by(username=new_username).first():
@@ -220,43 +187,22 @@ def profile():
                 return redirect(url_for('profile'))
             current_user.username = new_username
 
-        # Update password
         new_password = request.form.get("password")
         if new_password:
             current_user.password = generate_password_hash(new_password)
-
-        # Update bio
-        new_bio = request.form.get("bio")
-        if new_bio is not None:
-            current_user.bio = new_bio
 
         db.session.commit()
         flash("Profile updated successfully!")
         return redirect(url_for('profile'))
 
-    # Fetch tasks for current user
-    user_tasks = Task.query.filter_by(user_id=current_user.id).order_by(Task.date_created.desc()).all()
-
-    # Stats
-    total_tasks = len(user_tasks)
-    completed_tasks = sum(1 for t in user_tasks if t.completed)
-    pending_tasks = total_tasks - completed_tasks
-
-    return render_template(
-        'profile.html',
-        user=current_user,
-        tasks=user_tasks,
-        total_tasks=total_tasks,
-        completed_tasks=completed_tasks,
-        pending_tasks=pending_tasks
-    )
+    user_tasks = Task.query.filter_by(user_id=current_user.id).all()
+    return render_template('profile.html', user=current_user, tasks=user_tasks)
 
 
 # -------------------------
-# Run App
+# LOCAL RUN ONLY
 # -------------------------
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True, port=8000)
+    app.run(debug=True)
 
+       
