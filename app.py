@@ -98,6 +98,11 @@ def signup():
         return redirect(url_for('login'))
     return render_template('signup.html')
 
+@app.route('/favicon.ico')
+def favicon():
+    return '', 204
+
+
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
