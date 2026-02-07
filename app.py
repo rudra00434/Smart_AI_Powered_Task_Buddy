@@ -157,6 +157,15 @@ def task_history():
         .order_by(Task.date_created.desc()).all()
     return render_template('task-history.html', tasks=all_tasks)
 
+@app.route('/delete_task/<int:task_id>', methods=['POST'])
+@login_required
+def delete_task(task_id):
+    task = Task.query.get_or_404(task_id)
+    db.session.delete(task)
+    db.session.commit()
+    return redirect(url_for('hello_world'))
+
+
 @app.route('/chatbot')
 def chatbot():
     return render_template('Chatbot.html')
