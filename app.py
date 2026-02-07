@@ -155,7 +155,7 @@ def tasks():
 def task_history():
     all_tasks = Task.query.filter_by(user_id=current_user.id)\
         .order_by(Task.date_created.desc()).all()
-    return render_template('task_history.html', tasks=all_tasks)
+    return render_template('task-history.html', tasks=all_tasks)
 
 @app.route('/delete_task/<int:task_id>', methods=['POST'])
 @login_required
