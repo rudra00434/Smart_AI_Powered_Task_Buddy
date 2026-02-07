@@ -98,6 +98,10 @@ Data Storage (SQLite or JSON)
 ## Website Architecture
 <img width="1101" height="1444" alt="image" src="https://github.com/user-attachments/assets/dc3712e6-e028-472a-a63b-83d1df396627" />
 
+## Database Architecture
+<img width="1164" height="672" alt="image" src="https://github.com/user-attachments/assets/22fc445e-0f45-4596-a4ea-ced526da7dfc" />
+
+
 ## 📁 Project Structure
 ```
 Smart_AI_Powered_Task_Buddy/
